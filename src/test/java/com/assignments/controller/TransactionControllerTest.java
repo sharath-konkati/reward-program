@@ -89,7 +89,12 @@ public class TransactionControllerTest {
 
     @Test
     public void testDeleteTransaction() throws Exception {
-        mockMvc.perform(delete("/transactions/1")).andExpect(status().isOk());
+        Transaction transaction = new Transaction();
+        transaction.setId(1L);
+        transaction.setAmount(BigDecimal.valueOf(100));
+        transaction.setTimestamp(LocalDateTime.now());
+        when(transactionRepository.findById(1L)).thenReturn(Optional.of(transaction));
+        mockMvc.perform(delete("/transactions/1")).andExpect(status().isNoContent());
         verify(transactionRepository).deleteById(1L);
     }
 }

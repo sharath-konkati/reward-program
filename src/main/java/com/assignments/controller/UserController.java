@@ -1,7 +1,13 @@
 package com.assignments.controller;
 
 import com.assignments.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +23,17 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
 
+    @Operation(summary = "Get user reward points", description = "Get reward points earned by a user per month")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User reward points retrieved",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Collection.class))}),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping("/{userId}/rewards")
-    public Collection<Map<YearMonth, Integer>> getUserRewardPoints(@PathVariable Long userId) {
+    public ResponseEntity<?> getUserRewardPoints(@PathVariable Long userId) {
         Map<Long, Map<YearMonth, Integer>> userRewardPoints = userService.getUserRewardPoints(userId);
-        return userRewardPoints.values();
+        return ResponseEntity.ok().body(userRewardPoints.values());
     }
 }
