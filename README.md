@@ -1,5 +1,5 @@
 # reward-program
-This is a Java Spring Boot project that demonstrates the implementation of a RESTful API with an embedded database. It also integrates Swagger for API documentation.
+This is a Java Spring Boot project that demonstrates how a retailer offers a rewards program to its customers, awarding points based on each recorded purchase.
 
 ## Prerequisites
 
